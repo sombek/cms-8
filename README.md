@@ -23,7 +23,64 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+A Content Management System built with NestJS, Prisma, and PostgreSQL. This project provides a robust foundation for managing content with features like draft/published status, metadata support, and multilingual capabilities.
+
+## Database Setup
+
+This project uses PostgreSQL with Prisma ORM. Follow these steps to set up the database:
+
+### 1. Start the Database
+
+```bash
+# Start PostgreSQL using Docker Compose
+$ pnpm run docker:up
+
+# Or manually start with docker-compose
+$ docker-compose up -d
+```
+
+### 2. Environment Configuration
+
+Create a `.env` file in the root directory:
+
+```bash
+# Database
+DATABASE_URL="postgresql://cms_user:cms_password@localhost:5432/cms_db?schema=public"
+
+# Application
+PORT=3000
+NODE_ENV=development
+```
+
+### 3. Database Migration
+
+```bash
+# Generate Prisma client
+$ pnpm run db:generate
+
+# Push schema to database (for development)
+$ pnpm run db:push
+
+# Or create and run migrations (for production)
+$ pnpm run db:migrate
+```
+
+### 4. Seed Database (Optional)
+
+```bash
+# Add sample data to the database
+$ pnpm run db:seed
+```
+
+### 5. Database Management
+
+```bash
+# Open Prisma Studio (GUI for database)
+$ pnpm run db:studio
+
+# Or use Adminer at http://localhost:8080
+# Server: postgres, Username: cms_user, Password: cms_password, Database: cms_db
+```
 
 ## Project setup
 

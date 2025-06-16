@@ -1,0 +1,37 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client" // Required
+    output   = "../src/generated/prisma" // Required path
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Content {
+    id           String    @id @default(cuid())
+    title        String
+    description  String
+    body         String
+    category     String
+    language     String
+    published_at DateTime?
+    created_at   DateTime  @default(now())
+    updated_at   DateTime  @updatedAt
+    status       Status    @default(DRAFT)
+    author_id    String
+    meta_data    Json?
+
+    @@map("content")
+}
+
+enum Status {
+    DRAFT
+    PUBLISHED
+    ARCHIVED
+
+    @@map("status")
+}
