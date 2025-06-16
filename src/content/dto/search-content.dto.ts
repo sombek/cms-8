@@ -5,8 +5,10 @@ import {
   IsOptional,
   IsNumber,
   Min,
+  IsEnum,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { Status } from 'src/generated/prisma';
 
 export class SearchContentDto {
   @ApiProperty({
@@ -15,7 +17,56 @@ export class SearchContentDto {
   })
   @IsString()
   @IsNotEmpty()
-  q: string;
+  query: string;
+
+  @ApiProperty({
+    description: 'Filter by category',
+    required: false,
+    example: 'news',
+  })
+  @IsOptional()
+  @IsString()
+  category?: string;
+
+  @ApiProperty({
+    description: 'Filter by language',
+    required: false,
+    example: 'en',
+  })
+  @IsOptional()
+  @IsString()
+  language?: string;
+
+  @ApiProperty({
+    description: 'Filter by status',
+    required: false,
+    enum: Status,
+    example: Status.PUBLISHED,
+  })
+  @IsOptional()
+  @IsEnum(Status)
+  status?: Status;
+
+  @ApiProperty({
+    description: 'Field to sort by',
+    required: false,
+    example: 'created_at',
+    default: 'created_at',
+  })
+  @IsOptional()
+  @IsString()
+  sort_by?: string = 'created_at';
+
+  @ApiProperty({
+    description: 'Sort order',
+    required: false,
+    enum: ['asc', 'desc'],
+    example: 'desc',
+    default: 'desc',
+  })
+  @IsOptional()
+  @IsString()
+  sort_order?: 'asc' | 'desc' = 'desc';
 
   @ApiProperty({
     description: 'Page number (starts from 1)',

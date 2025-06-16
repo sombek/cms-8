@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Content } from '../content.entity';
+import { Status } from 'src/generated/prisma';
 
 export class ContentResponseDto {
   @ApiProperty({ description: 'Content ID', example: 'content-123' })
@@ -40,10 +40,10 @@ export class ContentResponseDto {
 
   @ApiProperty({
     description: 'Content status',
-    enum: ['draft', 'published', 'archived'],
+    enum: Status,
     example: 'published',
   })
-  status: 'draft' | 'published' | 'archived';
+  status: Status;
 
   @ApiProperty({ description: 'Author ID', example: 'user123' })
   author_id: string;

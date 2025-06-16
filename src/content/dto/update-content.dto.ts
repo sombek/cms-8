@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsOptional, IsEnum, IsObject } from 'class-validator';
+import { Status } from 'src/generated/prisma';
 
 export class UpdateContentDto {
   @ApiProperty({
@@ -49,13 +50,13 @@ export class UpdateContentDto {
 
   @ApiProperty({
     description: 'Content status',
-    enum: ['draft', 'published', 'archived'],
+    enum: Status,
     example: 'published',
     required: false,
   })
   @IsOptional()
-  @IsEnum(['draft', 'published', 'archived'])
-  status?: 'draft' | 'published' | 'archived';
+  @IsEnum(Status)
+  status?: Status;
 
   @ApiProperty({
     description: 'Additional metadata',

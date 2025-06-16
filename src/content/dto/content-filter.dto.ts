@@ -5,8 +5,10 @@ import {
   IsDateString,
   IsNumber,
   Min,
+  IsEnum,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { Status } from 'src/generated/prisma';
 
 export class ContentFilterDto {
   @ApiProperty({
@@ -28,6 +30,25 @@ export class ContentFilterDto {
   language?: string;
 
   @ApiProperty({
+    description: 'Filter by status',
+    required: false,
+    enum: Status,
+    example: Status.PUBLISHED,
+  })
+  @IsOptional()
+  @IsEnum(Status)
+  status?: Status;
+
+  @ApiProperty({
+    description: 'Filter by author ID',
+    required: false,
+    example: 'user123',
+  })
+  @IsOptional()
+  @IsString()
+  author_id?: string;
+
+  @ApiProperty({
     description: 'Filter by published date (from)',
     required: false,
     example: '2024-01-01T00:00:00Z',
@@ -44,6 +65,27 @@ export class ContentFilterDto {
   @IsOptional()
   @IsDateString()
   published_to?: string;
+
+  @ApiProperty({
+    description: 'Field to sort by',
+    required: false,
+    example: 'created_at',
+    default: 'created_at',
+  })
+  @IsOptional()
+  @IsString()
+  sort_by?: string = 'created_at';
+
+  @ApiProperty({
+    description: 'Sort order',
+    required: false,
+    enum: ['asc', 'desc'],
+    example: 'desc',
+    default: 'desc',
+  })
+  @IsOptional()
+  @IsString()
+  sort_order?: 'asc' | 'desc' = 'desc';
 
   @ApiProperty({
     description: 'Page number (starts from 1)',

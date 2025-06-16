@@ -6,6 +6,7 @@ import {
   IsEnum,
   IsObject,
 } from 'class-validator';
+import { Status } from 'src/generated/prisma';
 
 export class CreateContentDto {
   @ApiProperty({ description: 'Content title', example: 'Welcome to our CMS' })
@@ -44,8 +45,8 @@ export class CreateContentDto {
     enum: ['draft', 'published', 'archived'],
     example: 'draft',
   })
-  @IsEnum(['draft', 'published', 'archived'])
-  status: 'draft' | 'published' | 'archived';
+  @IsEnum(Status)
+  status: Status;
 
   @ApiProperty({ description: 'Author ID', example: 'user123' })
   @IsString()

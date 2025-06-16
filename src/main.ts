@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import 'dotenv/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -29,7 +30,6 @@ async function bootstrap() {
       'Content Discovery',
       'Public routes for content discovery and search',
     )
-    .setBasePath('api')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
