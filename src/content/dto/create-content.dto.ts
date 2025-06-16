@@ -6,7 +6,7 @@ import {
   IsEnum,
   IsObject,
 } from 'class-validator';
-import { Status } from 'src/generated/prisma';
+import { Status } from '../../generated/prisma';
 
 export class CreateContentDto {
   @ApiProperty({ description: 'Content title', example: 'Welcome to our CMS' })

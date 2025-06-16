@@ -1,11 +1,10 @@
 import { Logger, Module } from '@nestjs/common';
-import { ContentRepository } from './content.repository';
+import { ContentService } from './content.service';
 import { PrismaModule } from '../prisma/prisma.module';
-import { RedisModule } from '../redis/redis.module';
 
 @Module({
-  imports: [PrismaModule, RedisModule],
-  providers: [ContentRepository, Logger],
-  exports: [ContentRepository],
+  imports: [PrismaModule],
+  providers: [ContentService, Logger],
+  exports: [ContentService],
 })
 export class ContentModule {}

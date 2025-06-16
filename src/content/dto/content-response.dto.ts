@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Status } from 'src/generated/prisma';
+import { Status } from '../../generated/prisma';
 
 export class ContentResponseDto {
   @ApiProperty({ description: 'Content ID', example: 'content-123' })

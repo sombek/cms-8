@@ -6,9 +6,10 @@ import {
   IsNumber,
   Min,
   IsEnum,
+  Max,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { Status } from 'src/generated/prisma';
+import { Status } from '../../generated/prisma';
 
 export class ContentFilterDto {
   @ApiProperty({
@@ -109,5 +110,6 @@ export class ContentFilterDto {
   @Type(() => Number)
   @IsNumber()
   @Min(1)
+  @Max(100)
   limit?: number = 10;
 }

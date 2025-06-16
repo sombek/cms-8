@@ -6,6 +6,7 @@ import {
   Delete,
   Body,
   Param,
+  Query,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -13,19 +14,22 @@ import {
   ApiResponse,
   ApiParam,
   ApiBody,
+  ApiQuery,
 } from '@nestjs/swagger';
 import { CreateContentDto } from '../content/dto/create-content.dto';
 import { UpdateContentDto } from '../content/dto/update-content.dto';
 import {
   ContentResponseDto,
   DeleteContentResponseDto,
+  PaginatedContentResponseDto,
 } from '../content/dto/content-response.dto';
-import { CmsService } from './cms.service';
+import { ContentService } from '../content/content.service';
+import { ContentFilterDto } from '../content/dto/content-filter.dto';
 
 @ApiTags('CMS - Content Management')
 @Controller('cms')
 export class CmsController {
-  constructor(private readonly cmsService: CmsService) {}
+  constructor(private readonly contentService: ContentService) {}
 
   @Post('content')
   @ApiOperation({
@@ -38,18 +42,12 @@ export class CmsController {
     description: 'Content created successfully',
     type: ContentResponseDto,
   })
-  @ApiResponse({
-    status: 400,
-    description: 'Bad request - Invalid input data',
-  })
-  @ApiResponse({
-    status: 500,
-    description: 'Internal server error',
-  })
+  @ApiResponse({ status: 400, description: 'Bad request - Invalid input data' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
   async createContent(
     @Body() createContentDto: CreateContentDto,
   ): Promise<ContentResponseDto> {
-    return this.cmsService.createContent(createContentDto);
+    return this.contentService.create(createContentDto);
   }
 
   @Put('content/:id')
@@ -68,19 +66,13 @@ export class CmsController {
     description: 'Content updated successfully',
     type: ContentResponseDto,
   })
-  @ApiResponse({
-    status: 404,
-    description: 'Content not found',
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Bad request - Invalid input data',
-  })
+  @ApiResponse({ status: 404, description: 'Content not found' })
+  @ApiResponse({ status: 400, description: 'Bad request - Invalid input data' })
   async updateContent(
     @Param('id') id: string,
     @Body() updateContentDto: UpdateContentDto,
   ): Promise<ContentResponseDto> {
-    return this.cmsService.updateContent(id, updateContentDto);
+    return this.contentService.update(id, updateContentDto);
   }
 
   @Delete('content/:id')
@@ -98,14 +90,11 @@ export class CmsController {
     description: 'Content deleted successfully',
     type: DeleteContentResponseDto,
   })
-  @ApiResponse({
-    status: 404,
-    description: 'Content not found',
-  })
+  @ApiResponse({ status: 404, description: 'Content not found' })
   async deleteContent(
     @Param('id') id: string,
   ): Promise<DeleteContentResponseDto> {
-    return this.cmsService.deleteContent(id);
+    return this.contentService.delete(id);
   }
 
   @Get('content/:id')
@@ -123,13 +112,37 @@ export class CmsController {
     description: 'Content details retrieved successfully',
     type: ContentResponseDto,
   })
-  @ApiResponse({
-    status: 404,
-    description: 'Content not found',
-  })
+  @ApiResponse({ status: 404, description: 'Content not found' })
   async getContentDetails(
     @Param('id') id: string,
   ): Promise<ContentResponseDto> {
-    return this.cmsService.getContentDetails(id);
+    return this.contentService.findById(id);
+  }
+
+  @Get('content')
+  @ApiOperation({
+    summary: 'List all contents',
+    description:
+      'Retrieves a paginated list of all content items with optional filtering',
+  })
+  @ApiQuery({ type: ContentFilterDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Contents retrieved successfully',
+    type: PaginatedContentResponseDto,
+  })
+  async listContents(
+    @Query() filter: ContentFilterDto,
+  ): Promise<PaginatedContentResponseDto> {
+    const contents = await this.contentService.findAll(filter);
+    const total = await this.contentService.count(filter);
+
+    return {
+      data: contents,
+      total,
+      page: filter.page || 1,
+      limit: filter.limit || 10,
+      totalPages: Math.ceil(total / (filter.limit || 10)),
+    };
   }
 }
