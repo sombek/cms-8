@@ -5,6 +5,7 @@ import {
   Param,
   HttpStatus,
   HttpException,
+  Logger,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -13,10 +14,7 @@ import {
   ApiParam,
   ApiQuery,
 } from '@nestjs/swagger';
-import {
-  DiscoveryQueryDto,
-  RelatedContentQueryDto,
-} from './dto/discovery-query.dto';
+import { DiscoveryQueryDto } from './dto/discovery-query.dto';
 import {
   TrendingContentResponseDto,
   RecommendedContentResponseDto,
@@ -24,10 +22,16 @@ import {
   PopularContentResponseDto,
   DiscoveryContentDto,
 } from './dto/discovery-response.dto';
+import { DiscoveryService } from './discovery.service';
 
 @ApiTags('Content Discovery')
 @Controller('discovery')
 export class DiscoveryController {
+  constructor(
+    private readonly logger: Logger,
+    private readonly discoveryService: DiscoveryService,
+  ) {}
+
   @Get('trending')
   @ApiOperation({
     summary: 'Get trending content',
@@ -71,61 +75,10 @@ export class DiscoveryController {
     @Query() queryDto: DiscoveryQueryDto,
   ): Promise<TrendingContentResponseDto> {
     try {
-      // TODO: Implement trending algorithm based on:
-      // 1. View counts (weighted by recency)
-      // 2. Engagement metrics (likes, shares, comments)
-      // 3. Social signals
-      // 4. Content velocity (rate of interaction)
-
-      // Mock trending content
-      const trendingContent: DiscoveryContentDto[] = [
-        {
-          id: 'trending-1',
-          title: 'AI Revolution: Latest Breakthroughs in Machine Learning',
-          description:
-            'Discover the cutting-edge developments in artificial intelligence',
-          category: queryDto.category || 'technology',
-          language: queryDto.language || 'en',
-          published_at: new Date('2024-01-15T10:00:00Z'),
-          author_id: 'user123',
-          discovery_meta: {
-            viewCount: 15420,
-            likeCount: 892,
-            shareCount: 234,
-            trending_score: 0.98,
-            popularity_rank: 1,
-          },
-        },
-        {
-          id: 'trending-2',
-          title: 'Climate Change Solutions: Renewable Energy Advances',
-          description: 'Exploring innovative approaches to sustainable energy',
-          category: queryDto.category || 'environment',
-          language: queryDto.language || 'en',
-          published_at: new Date('2024-01-14T15:30:00Z'),
-          author_id: 'user456',
-          discovery_meta: {
-            viewCount: 12380,
-            likeCount: 567,
-            shareCount: 189,
-            trending_score: 0.95,
-            popularity_rank: 2,
-          },
-        },
-      ];
-
-      const page = queryDto.page || 1;
-      const limit = queryDto.limit || 10;
-      const total = 25;
-
-      return {
-        trending_content: trendingContent,
-        total,
-        page,
-        limit,
-        updated_at: new Date(),
-      };
+      return await this.discoveryService.getTrendingContent(queryDto);
     } catch (error) {
+      this.logger.error(error, 'Failed to retrieve trending content');
+      if (error instanceof HttpException) throw error;
       throw new HttpException(
         'Failed to retrieve trending content',
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -209,6 +162,8 @@ export class DiscoveryController {
         algorithm: 'content_based',
       };
     } catch (error) {
+      this.logger.error(error, 'Failed to retrieve recommended content');
+      if (error instanceof HttpException) throw error;
       throw new HttpException(
         'Failed to retrieve recommended content',
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -297,6 +252,8 @@ export class DiscoveryController {
         period,
       };
     } catch (error) {
+      this.logger.error(error, 'Failed to retrieve popular content');
+      if (error instanceof HttpException) throw error;
       throw new HttpException(
         'Failed to retrieve popular content',
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -366,6 +323,8 @@ export class DiscoveryController {
         limit: Math.min(limit, 20),
       };
     } catch (error) {
+      this.logger.error(error, 'Failed to retrieve related content');
+      if (error instanceof HttpException) throw error;
       throw new HttpException(
         'Failed to retrieve related content',
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -446,6 +405,8 @@ export class DiscoveryController {
         updated_at: new Date(),
       };
     } catch (error) {
+      this.logger.error(error, 'Failed to retrieve recent content');
+      if (error instanceof HttpException) throw error;
       throw new HttpException(
         'Failed to retrieve recent content',
         HttpStatus.INTERNAL_SERVER_ERROR,
