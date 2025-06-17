@@ -72,7 +72,7 @@ export class TrendingContentResponseDto {
   updated_at: Date;
 }
 
-export class RecommendedContentResponseDto {
+export class SearchContentResponseDto {
   @ApiProperty({
     type: [DiscoveryContentDto],
     description: 'Array of recommended content items',
@@ -93,41 +93,4 @@ export class RecommendedContentResponseDto {
     example: 'content_based',
   })
   algorithm: string;
-}
-
-export class RelatedContentResponseDto {
-  @ApiProperty({
-    type: [DiscoveryContentDto],
-    description: 'Array of related content items',
-  })
-  related_content: DiscoveryContentDto[];
-
-  @ApiProperty({ description: 'Original content ID', example: 'content-123' })
-  original_content_id: string;
-
-  @ApiProperty({ description: 'Total related items found', example: 8 })
-  total: number;
-
-  @ApiProperty({ description: 'Items returned', example: 5 })
-  limit: number;
-}
-
-export class PopularContentResponseDto {
-  @ApiProperty({
-    type: [DiscoveryContentDto],
-    description: 'Array of popular content items',
-  })
-  popular_content: DiscoveryContentDto[];
-
-  @ApiProperty({ description: 'Total popular items', example: 50 })
-  total: number;
-
-  @ApiProperty({ description: 'Current page', example: 1 })
-  page: number;
-
-  @ApiProperty({ description: 'Items per page', example: 10 })
-  limit: number;
-
-  @ApiProperty({ description: 'Time period for popularity', example: '7d' })
-  period: string;
 }

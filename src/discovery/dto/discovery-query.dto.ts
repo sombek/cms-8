@@ -6,7 +6,7 @@ export class DiscoveryQueryDto {
   @ApiProperty({
     description: 'Filter by category',
     required: false,
-    example: 'news',
+    example: 'Podcast',
   })
   @IsOptional()
   @IsString()
@@ -15,7 +15,7 @@ export class DiscoveryQueryDto {
   @ApiProperty({
     description: 'Filter by language',
     required: false,
-    example: 'en',
+    example: 'ar',
   })
   @IsOptional()
   @IsString()
@@ -48,25 +48,12 @@ export class DiscoveryQueryDto {
   limit?: number = 10;
 }
 
-export class RelatedContentQueryDto {
+export class SearchContentQueryDto {
   @ApiProperty({
-    description: 'Content ID to find related content for',
-    example: 'content-123',
+    description: 'حلقات بودكاست',
+    required: true,
+    example: 'حلقات فنجان',
   })
   @IsString()
-  contentId: string;
-
-  @ApiProperty({
-    description: 'Number of related items to return',
-    required: false,
-    example: 5,
-    minimum: 1,
-    maximum: 20,
-  })
-  @IsOptional()
-  @Type(() => Number)
-  @IsNumber()
-  @Min(1)
-  @Max(20)
-  limit?: number = 5;
+  query: string;
 }

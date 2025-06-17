@@ -25,6 +25,16 @@ model Content {
     author_id    String
     meta_data    Json?
 
+    @@index([category])
+    @@index([language])
+    @@index([status])
+    @@index([author_id])
+    @@index([published_at])
+    @@index([created_at])
+    @@index([updated_at])
+    @@index([status, published_at])
+    @@index([category, status])
+    @@index([author_id, status])
     @@map("content")
 }
 

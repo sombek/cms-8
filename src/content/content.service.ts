@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotImplementedException } from '@nestjs/common';
 import { CreateContentDto } from './dto/create-content.dto';
 import { UpdateContentDto } from './dto/update-content.dto';
 import {
@@ -8,6 +8,8 @@ import {
 import { ContentFilterDto } from './dto/content-filter.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { plainToInstance } from 'class-transformer';
+import { SearchContentResponseDto } from 'src/discovery/dto/discovery-response.dto';
+import { SearchContentQueryDto } from 'src/discovery/dto/discovery-query.dto';
 
 @Injectable()
 export class ContentService {
@@ -115,5 +117,15 @@ export class ContentService {
       this.logger.error(error, 'ContentService: Failed to count contents');
       throw error;
     }
+  }
+
+  async search(
+    query: SearchContentQueryDto,
+  ): Promise<SearchContentResponseDto> {
+    console.log('query', query);
+
+    throw new NotImplementedException(
+      'Should call Elastic search to search for content',
+    );
   }
 }
