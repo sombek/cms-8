@@ -51,7 +51,10 @@ export class ContentService {
       const content = await this.prisma.content.delete({
         where: { id },
       });
-      return plainToInstance(DeleteContentResponseDto, content);
+      return plainToInstance(DeleteContentResponseDto, {
+        message: 'Content deleted successfully',
+        id: content.id,
+      });
     } catch (error) {
       this.logger.error(error, 'ContentService: Failed to delete content');
       throw error;
@@ -84,9 +87,9 @@ export class ContentService {
       const contents = await this.prisma.content.findMany({
         where: whereFilter,
         skip,
-        take: limit,
+        take: +limit,
         orderBy: {
-          [sort_by as string]: sort_order,
+          [sort_by]: sort_order,
         },
       });
       return plainToInstance(ContentResponseDto, contents);
@@ -99,10 +102,15 @@ export class ContentService {
   async count(
     filter: Omit<ContentFilterDto, 'page' | 'limit' | 'sort_by' | 'sort_order'>,
   ): Promise<number> {
+    const usedFilter = {
+      ...filter,
+      page: undefined,
+      limit: undefined,
+      sort_by: undefined,
+      sort_order: undefined,
+    };
     try {
-      return await this.prisma.content.count({
-        where: filter,
-      });
+      return await this.prisma.content.count({ where: usedFilter });
     } catch (error) {
       this.logger.error(error, 'ContentService: Failed to count contents');
       throw error;

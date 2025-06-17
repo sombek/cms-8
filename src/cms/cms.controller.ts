@@ -25,6 +25,7 @@ import {
 } from '../content/dto/content-response.dto';
 import { ContentService } from '../content/content.service';
 import { ContentFilterDto } from '../content/dto/content-filter.dto';
+import { plainToInstance } from 'class-transformer';
 
 @ApiTags('CMS - Content Management')
 @Controller('cms')
@@ -134,15 +135,16 @@ export class CmsController {
   async listContents(
     @Query() filter: ContentFilterDto,
   ): Promise<PaginatedContentResponseDto> {
+    // make sure page and limit are numbers
     const contents = await this.contentService.findAll(filter);
     const total = await this.contentService.count(filter);
 
-    return {
+    return plainToInstance(PaginatedContentResponseDto, {
       data: contents,
       total,
-      page: filter.page || 1,
-      limit: filter.limit || 10,
-      totalPages: Math.ceil(total / (filter.limit || 10)),
-    };
+      page: filter.page ? Number(filter.page) : 1,
+      limit: filter.limit ? Number(filter.limit) : 10,
+      totalPages: Math.ceil(total / (filter.limit ? Number(filter.limit) : 10)),
+    });
   }
 }
