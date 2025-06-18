@@ -1,7 +1,7 @@
 ## 🧾 المستند التقني – حل التكليف
 
 ![تصميم النظام](./image.png)
-[فيديو شرح النظام](https://youtu.be/EEZ7j_NrRjQ)
+[![فيديو شرح النظام](https://i9.ytimg.com/vi/EEZ7j_NrRjQ/mqdefault.jpg?sqp=CLyCysIG-oaymwEmCMACELQB8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGGIgZShbMA8=&rs=AOn4CLA19a8pSHdRKUDatPhkVvh03eh8tw)](https://youtu.be/EEZ7j_NrRjQ)
 
 ### 📌 التقنية المستخدمة:
 
